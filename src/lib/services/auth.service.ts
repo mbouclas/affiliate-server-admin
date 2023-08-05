@@ -40,6 +40,14 @@ export interface IGates {
     provider: string;
 }
 
+export interface ISite {
+    id: string;
+    name: string;
+    url: string;
+    description: string;
+}
+
+
 export class AuthService  {
     static currentUser() {
         let storedUser;

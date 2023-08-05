@@ -2,10 +2,28 @@
     import {activeJobsStore, repeatableJobsStore} from "../../scraper-store";
     import { Button, Dropdown, DropdownItem, DropdownHeader, Avatar } from 'flowbite-svelte'
     import {formatDate} from "../../helpers/dates";
-    let repeatableJobs = [];
+    import {resetActiveSiteAction, setActiveSiteAction, userStore} from "../../user-store";
+    import type {ISite} from "../services/auth.service";
+    let repeatableJobs = [],
+        activeSite: ISite = null;
+
     repeatableJobsStore.subscribe(value => {
         repeatableJobs = value.splice(0, 5);
     });
+    userStore.subscribe((user) => {
+        if (!user) {
+            return;
+        }
+
+        if (user.activeSite) {
+            activeSite = user.activeSite;
+        }
+    });
+
+    function resetActiveSite() {
+        activeSite = null;
+        resetActiveSiteAction();
+    }
 </script>
 
 <nav class=" bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 ">
@@ -97,6 +115,12 @@
             <span class="dark:text-gray-400">
 
             </span>
+            {#if activeSite}
+            <button on:click={resetActiveSite}
+                    type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                {activeSite.name}
+            </button>
+                {/if}
             <!-- Notifications -->
             <button type="button" id="bell" class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400">
                 <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>

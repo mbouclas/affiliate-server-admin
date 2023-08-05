@@ -13,8 +13,9 @@
     import FailedJobs from "../lib/components/failed-jobs-notifier.svelte";
     import {v4} from "uuid";
 
+
     let categoriesModalOpen = false;
-    localStorage.setItem('appName', import.meta.env.VITE_APP_NAME)
+
     interface ExtendedINotification extends INotification {
         id: string;
     }
