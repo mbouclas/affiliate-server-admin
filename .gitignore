@@ -39,6 +39,7 @@ upload/*
 ES-Queries
 src/submodules/*
 .env
+.env*
 client-configs/*.js
 client-configs/*.json
 client-configs/*.ts

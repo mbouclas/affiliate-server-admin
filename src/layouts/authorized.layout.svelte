@@ -21,12 +21,6 @@
     }
 
 
-
-    let site = {
-        name: 'Flowbite-Svelte',
-        href: '/',
-        img: '/images/flowbite-svelte-icon-logo.svg'
-    };
     let showNotifications: ExtendedINotification[] = [];
 
 
@@ -48,9 +42,10 @@
     };
 
     $: {
-        $notificationsStore && $notificationsStore.length && addAndRemove()
+        $notificationsStore && $notificationsStore.length && addAndRemove();
     };
 </script>
+
 
 
 <ActiveJobs />

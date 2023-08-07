@@ -27,6 +27,7 @@ export interface IProduct {
     gallery?: IBaseImageModel[];
     affiliate?: string;
     seo?: ISeoFields;
+    technicalDetails?: ITechnicalDetail[];
 }
 export interface IProductVariant {
     title: string;
@@ -50,4 +51,10 @@ export interface ISeoFields {
     ogType?: string;
     ogSiteName?: string;
     ogLocale?: string;
+}
+
+export interface ITechnicalDetail {
+    title: string;
+    value: string;
+    slug: string;
 }

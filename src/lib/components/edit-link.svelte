@@ -22,7 +22,7 @@
     }
 
     async function save() {
-        dispatch('update', product);
+
 
         await (new ProductService()).update(product.id, product);
 
@@ -31,9 +31,12 @@
             type: 'success',
         });
 
+        dispatch('update', product);
+
         if (closeOnSave) {
             product = null;
         }
+
     }
 
 </script>

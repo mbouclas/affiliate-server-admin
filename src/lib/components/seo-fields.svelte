@@ -12,9 +12,9 @@
 
 <div class="mb-4">
     <label for="title" class="block mb-2">Title:</label>
-    <Input id="title" bind:value={model.title} required class="w-full" />
+    <Input id="title" bind:value={model.title} class="w-full" />
 </div>
 <div class="mb-4">
     <label for="title" class="block mb-2">Title:</label>
-    <Textarea id="title" bind:value={model.description} required class="w-full"></Textarea>
+    <Textarea id="title" bind:value={model.description} class="w-full"></Textarea>
 </div>

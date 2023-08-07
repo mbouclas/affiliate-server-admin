@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:prod": "cross-env NODE_ENV=production vite build --emptyOutDir",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
@@ -42,6 +43,7 @@
     "@uppy/tus": "^3.1.2",
     "@uppy/webcam": "^3.3.1",
     "@uppy/xhr-upload": "^3.3.1",
+    "cross-env": "^7.0.3",
     "easymde": "^2.18.0",
     "flowbite": "^1.7.0",
     "flowbite-svelte": "^0.40.2",

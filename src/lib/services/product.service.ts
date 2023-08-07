@@ -44,8 +44,16 @@ export class ProductService extends BaseHttpService {
 
     async update(id: string, data: IGenericObject): Promise<IProduct> {
         try {
-            const res = await this.patch(`product/${id}`, data);
-            return res;
+            return  await this.patch(`product/${id}`, data);
+        } catch (err) {
+            throw err;
+        }
+    }
+
+
+    async store(data: Partial<IProduct>) {
+        try {
+            return await this.post(`product`, data);
         } catch (err) {
             throw err;
         }

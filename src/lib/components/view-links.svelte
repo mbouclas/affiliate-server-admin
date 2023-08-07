@@ -1,20 +1,19 @@
 <script lang="ts">
     import {onMount} from "svelte";
-    import {  Heading, Hr } from 'flowbite-svelte'
-    import {ProductService} from "../services/product.service";
+    import {Heading} from 'flowbite-svelte'
     import type {INewProductJob} from "../services/product.service";
+    import {ProductService} from "../services/product.service";
     import {moneyFormat, truncateString} from "../../helpers/strings";
     import {formatDate} from "../../helpers/dates";
     import Paginator from '../../shared/Paginator.svelte';
-    import Loading from '../../shared/Loading.svelte';
     import {setNotificationAction} from "../../notifications-store";
     import AddProductsModal from './add-link.svelte';
+    import AddProductModal from './add-product.svelte';
     import EditProductModal from './edit-link.svelte';
     import type {IEvent} from "../../shared/models/general";
-    import {
-        refreshProductListStore,
-    } from "../../scraper-store";
+    import {refreshProductListStore,} from "../../scraper-store";
     import type {IProduct} from "../../shared/models/product";
+    import {productStore, ProductStoreAction} from "../../product-store";
 
     const defaultFilters = {
         limit: 40,
@@ -44,6 +43,16 @@
         await reset();
         refreshProductListStore.set(false);
     });
+
+    productStore.subscribe(async (state) => {
+        if (!state) {return}
+        if (state.action === ProductStoreAction.ADD) {
+            console.log('new product added', state.payload);
+            await reset();
+            currentProduct = state.payload;
+            return
+        }
+    })
 
     onMount(async () => {
 
@@ -118,15 +127,20 @@
         //start the listener for the new items
     }
 
-    function handleEditComplete(e: IEvent<IProduct>) {
-
+    async function handleEditComplete(e: IEvent<IProduct>) {
+        await search();
         //start the listener for the new items
+    }
+
+    function handleProductAdded(e: IEvent<IProduct>) {
+
     }
 </script>
 
 <!-- Start block -->
 <AddProductsModal open={showAddProductsModal} on:productsAdded={handleProductsAdded} />
-<EditProductModal product={currentProduct} on:update={handleEditComplete} closeOnSave={true} />
+<AddProductModal open={showAddProductModal} on:productAdded={handleProductAdded} />
+<EditProductModal bind:product={currentProduct} on:update={handleEditComplete} closeOnSave={false} />
 <div class="my-4">
     <Heading tag="h3">{res.total || 0} Products</Heading>
 </div>
@@ -275,22 +289,24 @@
                                         type="checkbox"
                                         class="text-blue-500 border-gray-300 rounded dark:bg-gray-900 dark:ring-offset-gray-900 dark:border-gray-700"
                                 />
+                                {#if item.thumb}
                                 <a href="#" on:click|preventDefault={() => currentProduct = item} class="h-24 w-24">
                                     <img class=" object-contain w-24 h-24" src={item.thumb.url} />
                                 </a>
-
+                                    {/if}
                             </div>
                         </td>
                         <td class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white" title={item.title}>
                             <a href="#" on:click|preventDefault={() => currentProduct = item}>{truncateString(item.title)}</a>
                         </td>
                         <td class="px-4 py-3 space-y-4 max-w-[12rem]">
+                            {#if Array.isArray(item.categories)}
                             {#each item.categories as category}
                             <span class="inline-flex mr-2  items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                 {category.title}
                             </span>
-
                                 {/each}
+                                {/if}
                         </td>
                         <td class="px-4 py-3">{moneyFormat(item.price)}</td>
                         <td class="px-12 py-4 text-sm font-medium text-gray-700 whitespace-nowrap">

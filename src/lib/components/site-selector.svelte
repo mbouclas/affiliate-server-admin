@@ -1,20 +1,17 @@
 <script lang="ts">
 import type {ISite} from "../services/auth.service";
-import {setActiveSiteAction, userStore} from "../../user-store";
+import {getUserFromStorage, setActiveSiteAction, userStore} from "../../user-store";
 
 
 export let model: ISite;
 let sites: ISite[] = [];
-userStore.subscribe((user) => {
-    if (!user) {return;}
+const user = getUserFromStorage();
 
-    if (user.allowedSites.length === 1) {
-        setActiveSiteAction(user.allowedSites[0]);
-        return;
-    }
+/*if (Array.isArray(user.allowedSites) && user.allowedSites.length === 1) {
+    setActiveSiteAction(user.allowedSites[0]);
+}*/
 
-    sites = user.allowedSites;
-});
+sites = user.allowedSites;
 
 function setActiveSite(site: ISite) {
     setActiveSiteAction(site);

@@ -42,7 +42,7 @@
   }
 
 </script>
-<div  class={`fixed  ${positionClass} w-full h-auto z-50`} role="alert"
+<div  class={`fixed  ${positionClass} w-full h-auto z-[9999999]`} role="alert"
       >
   <div class=" relative h-64">
   <Toast
@@ -52,7 +52,7 @@
           {color}
           {position}
           contentClass="flex space-x-4 divide-x divide-gray-200 dark:divide-gray-700 "
-          divClass={`w-full max-w-xs p-4 text-gray-500 bg-white shadow dark:text-gray-400 dark:bg-gray-700 gap-3 z-50`}
+          divClass={`w-full max-w-xs p-4 text-gray-500 bg-white shadow dark:text-gray-400 dark:bg-gray-700 gap-3 z-[9999999]`}
   >
 
     <svelte:fragment slot="icon">

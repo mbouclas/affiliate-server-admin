@@ -2,7 +2,7 @@
     import {object, string} from 'yup';
     import {extractValidationErrors} from "../helpers/validation";
     import {AuthService} from "../lib/services/auth.service";
-    import {setUserStore} from "../user-store";
+    import {setUserStore, userStore} from "../user-store";
 
     const schema = object({
         email: string().email("Email doesn't look right").required('Please provide your email'),
@@ -35,6 +35,9 @@ async function submit() {
     }
 }
 </script>
+<svelte:head>
+    <title>Login</title>
+</svelte:head>
 <section class="bg-gray-50 dark:bg-gray-900">
 
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">

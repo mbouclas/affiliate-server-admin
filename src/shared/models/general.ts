@@ -17,7 +17,7 @@ export interface IPagination<T> {
 
 export interface IBaseImageModel {
     id?: string;
-    uuid: string;
+    uuid?: string;
     url: string;
     caption?: string;
     alt?: string;

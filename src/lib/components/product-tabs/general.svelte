@@ -13,6 +13,7 @@
     import {productStore, ProductStoreAction} from "../../../product-store";
     import AffiliateUrlEditor from '../../affiliate-url-editor.svelte';
     import SeoFields from '../seo-fields.svelte';
+    import TechnicalDetailsEditor from '../technical-details-editor.svelte';
 
     const dispatch = createEventDispatcher();
     export let product: IProduct;
@@ -94,10 +95,12 @@
     }
 
     async function onUploadComplete(e: IEvent<IUploadImageResult>) {
-
+        product.thumb = e.detail;
+        await save();
     }
     async function onImageDetailsChanged(e: IEvent<IBaseImageModel>) {
-
+        product.thumb = e.detail;
+        await save();
     }
 
 </script>
@@ -109,7 +112,16 @@
         <Label for="title" class="mb-2">Title</Label>
         <Input type="text" id="title" placeholder="Title" bind:value={product.title} />
     </div>
-
+    <div class="grid gap-6 mb-6 md:grid-cols-2">
+    <div class="mb-6">
+        <Label for="price" class="mb-2">Price</Label>
+        <Input type="text" id="price" placeholder="Price" bind:value={product.price} />
+    </div>
+        <div class="mb-6">
+            <Label for="sku" class="mb-2">SKU</Label>
+            <Input type="text" id="sku" placeholder="SKU" bind:value={product.sku} />
+        </div>
+    </div>
     <div class="mb-6">
         <Label class="mb-2">About</Label>
 
@@ -124,7 +136,7 @@
     <div class="grid gap-6 mb-6 md:grid-cols-2">
         <div>
 
-            <AffiliateUrlEditor model={product.affiliateUrl} productId={product.id}
+            <AffiliateUrlEditor bind:model={product.affiliateUrl} productId={product.id}
                                 on:update={(e) => onMarkdownUpdate('affiliateUrl', e.detail)} />
         </div>
         <div>
@@ -168,5 +180,11 @@
         <Hr class="my-8" />
 
         <SeoFields bind:model="{product.seo}" />
+    </div>
+
+    <div class="my-4">
+        <Heading tag="h4">Technical details</Heading>
+        <Hr class="my-8" />
+        <TechnicalDetailsEditor bind:model="{product.technicalDetails}" productId={product.id} />
     </div>
 </form>

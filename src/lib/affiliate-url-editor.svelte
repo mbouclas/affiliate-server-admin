@@ -10,7 +10,7 @@ import {formatDate} from "../helpers/dates";
     import {setNotificationAction} from "../notifications-store";
 export let model: string;
 let affiliate: string;
-let disabled = true;
+let disabled = false;
 export let productId: string;
 const dispatch = createEventDispatcher();
 let repeatableJob: IRepeatableJob;
@@ -22,7 +22,9 @@ onMount(async () => {
         if (!repeatableJob || !repeatableJob.next) {
             repeatableJob = null;
         }
-
+    }
+    if (model && model.length > 0) {
+        disabled = true;
     }
 
 })

@@ -35,9 +35,11 @@ export const setActiveSiteAction = (site: ISite) => {
 
 export const resetActiveSiteAction = () => {
     localStorage.removeItem('appName');
+
     userStore.update((user) => {
         user.activeSite = null;
         localStorage.setItem('user', JSON.stringify(user));
+        console.log('------',user)
         return user;
     });
 }
@@ -51,3 +53,7 @@ if (existingUser) {
 }
 
 
+export const getUserFromStorage = () => {
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
+}
