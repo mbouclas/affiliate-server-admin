@@ -91,7 +91,7 @@
     }
 
     async function onCategorySelected(e: IEvent<any>) {
-        console.log(e.detail)
+        // console.log(e.detail)
     }
 
     async function onUploadComplete(e: IEvent<IUploadImageResult>) {
@@ -173,6 +173,18 @@
         </div>
 
 
+    </div>
+
+    <div class="grid gap-6 mb-6 md:grid-cols-2">
+        <div class="mb-6">
+            <Label for="rating" class="mb-2">Rating</Label>
+            <Input type="number" id="rating" placeholder="Rating" bind:value={product.rating} />
+        </div>
+
+        <div class="mb-6">
+            <Label for="ratings" class="mb-2">Ratings</Label>
+            <Input type="number" id="ratings" placeholder="Ratings" bind:value={product.ratings} />
+        </div>
     </div>
 
     <div class="my-4">

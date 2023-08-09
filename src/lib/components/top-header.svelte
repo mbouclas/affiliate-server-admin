@@ -63,6 +63,7 @@
                 </svg>
                 <span class="sr-only">Toggle sidebar</span>
             </button>
+
             <a href="https://flowbite.com" class="flex items-center justify-between mr-4">
                 <img
                         src="https://flowbite.s3.amazonaws.com/logo.svg"
@@ -189,11 +190,13 @@
                     data-dropdown-toggle="dropdown"
             >
                 <span class="sr-only">Open user menu</span>
+                {#if $userStore.image}
                 <img
                         class="w-8 h-8 rounded-full"
-                        src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/michael-gough.png"
+                        src={$userStore.image}
                         alt="user photo"
                 />
+                    {/if}
             </button>
             <!-- Dropdown menu -->
             <div

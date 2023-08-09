@@ -20,7 +20,8 @@
 
     let uppyDashboard;
     export let uploaders = [
-        'local'
+        'local',
+        'url'
     ], id = 'uploader',
         buttonTitle = 'Upload',
         webCamModes = [
@@ -45,7 +46,7 @@
     export let options: UppyOptions = {};
     onMount(() => {
         const user = JSON.parse(localStorage.getItem('user'));
-        const companionUrl = `${import.meta.env.PUBLIC_BASE_URL}companion`;
+        const companionUrl = `${import.meta.env.VITE_UPPY_COMPANION_URL}/companion`;
         uppyDashboard = new Uppy({
                 logger: debugLogger,
                 meta,

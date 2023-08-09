@@ -178,7 +178,7 @@
                   allowedFileTypes={['.jpg', '.jpeg', '.png', '.webp']}
                   maxNumberOfFiles={50}
                   meta={metaData}
-                  webCamModes={['picture']} uploaders={['webcam']} buttonTitle="Upload photo">
+                  webCamModes={['picture']} uploaders={['webcam', 'url']} buttonTitle="Upload photo">
         <div class="w-full h-16 bg-white border-t border-gray-200 dark:bg-gray-700 dark:border-gray-600 ">
             <div class="grid h-full max-w-lg grid-cols-2 mx-auto font-medium ">
                 <button id="product-upload-button"
