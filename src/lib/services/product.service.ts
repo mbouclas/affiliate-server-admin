@@ -29,6 +29,10 @@ export class ProductService extends BaseHttpService {
         return ProductService.affiliates;
     }
 
+    async quickSearch(query: string): Promise<IPagination<IProduct>> {
+        return await this.get(`product/quick?q=${query}`);
+    }
+
     async find(filters: IGenericObject = {}, relationships: string[] = []): Promise<IPagination<IProduct>> {
         let qs;
         if (Object.keys(filters).length > 0) {

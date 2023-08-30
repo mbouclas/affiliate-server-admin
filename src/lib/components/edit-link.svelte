@@ -39,9 +39,19 @@
 
     }
 
+    function onModalClosed() {
+        dispatch('closed')
+    }
+
+    $: {
+        if (!product) {
+            onModalClosed()
+        }
+    }
+
 </script>
 {#if product}
-<Modal {id} title={product.title || 'Edit Product'} bind:open={product} {size} autoclose={false}>
+<Modal {id} title={product.title || 'Edit Product'} bind:open={product} {size} autoclose={false} on:close={onModalClosed}>
     <Tabs style="underline" divider={false}>
         <TabItem open  title="General">
             <General {product} on:save={save} />

@@ -40,7 +40,7 @@ export const resetActiveSiteAction = () => {
     userStore.update((user) => {
         user.activeSite = null;
         localStorage.setItem('user', JSON.stringify(user));
-        console.log('------',user)
+
         return user;
     });
 }

@@ -36,6 +36,7 @@ export interface IProductVariant {
 export interface IProductCategory {
     slug: string;
     title: string;
+    id: string;
 }
 
 

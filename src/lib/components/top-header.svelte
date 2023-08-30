@@ -1,13 +1,24 @@
 <script lang="ts">
     import {activeJobsStore, repeatableJobsStore} from "../../scraper-store";
-    import { Button, Dropdown, DropdownItem, DropdownHeader, Avatar } from 'flowbite-svelte'
+    import {Button, Dropdown, DropdownItem, DropdownHeader, Avatar, Modal} from 'flowbite-svelte'
     import {formatDate} from "../../helpers/dates";
     import {resetActiveSiteAction, setActiveSiteAction, userStore} from "../../user-store";
     import type {ISite} from "../services/auth.service";
+    import QuickSearch from "./search/product-selector.svelte";
+    import type {IEvent} from "../../shared/models/general";
+    import type {IProduct} from "../../shared/models/product";
+    import {Icon} from "flowbite-svelte-icons";
+    import EditProductModal from "./edit-link.svelte";
     let repeatableJobs = [],
-        activeSite: ISite = null;
+        activeSite: ISite = null,
+        showQuickSearchModal = false,
+        selectedQuickFindProduct: IProduct = null;
 
     repeatableJobsStore.subscribe(value => {
+        if (!Array.isArray(value)) {
+            return;
+        }
+
         repeatableJobs = value.splice(0, 5);
     });
     userStore.subscribe((user) => {
@@ -24,7 +35,35 @@
         activeSite = null;
         resetActiveSiteAction();
     }
+
+    function updateResults(e: IEvent<IProduct[]>) {
+        // show modal
+    }
+
+    async function onReset() {
+
+    }
+
+    function onQuickSearchItemClicked(item: IProduct) {
+        showQuickSearchModal = false;
+        selectedQuickFindProduct = item;
+    }
+
+    function handleEditComplete() {
+
+    }
 </script>
+{#if selectedQuickFindProduct}
+    <EditProductModal bind:product={selectedQuickFindProduct} on:update={handleEditComplete} closeOnSave={false}
+    on:closed={() => selectedQuickFindProduct = null}/>
+    {/if}
+<Modal id="quickSearchModal" title="Find Products" bind:open={showQuickSearchModal} size="xl" autoclose={false}>
+    <QuickSearch onClickItem={onQuickSearchItemClicked}>
+        <div slot="button">
+
+        </div>
+    </QuickSearch>
+</Modal>
 
 <nav class=" bg-white border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-24 right-0 top-0 ">
     <div class="flex flex-wrap justify-between items-center">
@@ -72,34 +111,7 @@
                 />
                 <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
             </a>
-            <form action="#" method="GET" class="hidden md:block md:pl-2">
-                <label for="topbar-search" class="sr-only">Search</label>
-                <div class="relative md:w-64 md:w-96">
-                    <div
-                            class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-                    >
-                        <svg
-                                class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                fill="currentColor"
-                                viewBox="0 0 20 20"
-                                xmlns="http://www.w3.org/2000/svg"
-                        >
-                            <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                            ></path>
-                        </svg>
-                    </div>
-                    <input
-                            type="text"
-                            name="email"
-                            id="topbar-search"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                            placeholder="Search"
-                    />
-                </div>
-            </form>
+
         </div>
         <div class="flex items-center lg:order-2">
             <button
@@ -122,6 +134,15 @@
                 {activeSite.name}
             </button>
                 {/if}
+            <button type="button" on:click={() => showQuickSearchModal = !showQuickSearchModal }
+                    id="search" class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400">
+                <Icon name="search-solid"></Icon>
+                <div class="flex relative">
+                    {#if $activeJobsStore.length > 0}
+                        <div class="inline-flex relative -top-2 right-3 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-900"></div>
+                    {/if}
+                </div>
+            </button>
             <!-- Notifications -->
             <button type="button" id="bell" class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400">
                 <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z"></path></svg>

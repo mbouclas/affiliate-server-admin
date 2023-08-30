@@ -17,6 +17,7 @@
     export let productId;
 
 
+
     onMount(async () => {
         loading = true;
         const res = await new ProductCategoryService().find();
@@ -24,7 +25,13 @@
                 name: `${Array(i.level).fill('-').join('')} ${i.title}`, value: i.id
             }}));
         loading = false;
-        selected = model.map(m => m.id);
+        selected = model.map(m => {
+            if (typeof m === 'string') {
+                return m;
+            }
+
+            return m.id
+        });
     });
 
     async function onCategorySelection(e) {

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { Button, Dropdown, DropdownItem } from 'flowbite-svelte';
     import { notificationsStore} from "../notifications-store";
     import type { INotification} from "../notifications-store";
     import Top from "../lib/components/top-header.svelte";
@@ -7,14 +8,23 @@
     import ViewLinks from "../lib/components/view-links.svelte";
     import RepeatableJobs from "../lib/components/repeatable-jobs-notifier.svelte";
     import AddLinks from "../lib/components/add-link.svelte";
+    import HomePage from "../lib/components/homepage/dashboard.svelte";
+    import Menus from "../lib/components/menu/dashboard.svelte";
+    import Collections from "../lib/components/collections/dashboard.svelte";
     import NewJobs from "../lib/components/new-job-notifier.svelte";
     import ProductCategories from "../lib/components/product-categories.svelte";
     import ActiveJobs from "../lib/components/active-jobs-notifier.svelte";
     import FailedJobs from "../lib/components/failed-jobs-notifier.svelte";
     import {v4} from "uuid";
+    import QuickSearch from "../lib/components/search/quick-search.svelte";
+    import type {IEvent} from "../shared/models/general";
+    import type {IProduct} from "../shared/models/product";
 
 
-    let categoriesModalOpen = false;
+    let categoriesModalOpen = false,
+        homePageModalOpen = false,
+        menusModalOpen = false,
+        collectionsModalOpen = false;
 
     interface ExtendedINotification extends INotification {
         id: string;
@@ -43,7 +53,15 @@
 
     $: {
         $notificationsStore && $notificationsStore.length && addAndRemove();
-    };
+    }
+
+    function updateResults(e: IEvent<IProduct[]>) {
+        // show modal
+    }
+
+    async function onReset() {
+
+    }
 </script>
 
 
@@ -54,6 +72,15 @@
 <FailedJobs />
 <Modal id="categories-modal" title="Categories" bind:open={categoriesModalOpen} size="xl" autoclose={false}>
     <ProductCategories />
+</Modal>
+<Modal id="homepage-modal" title="Home Page" size="xl" autoclose={false} bind:open={homePageModalOpen}>
+<HomePage />
+</Modal>
+<Modal id="menus-modal" title="Menus" size="xl" autoclose={false} bind:open={menusModalOpen}>
+<Menus />
+</Modal>
+<Modal id="collections-modal" title="Collections" size="xl" autoclose={false} bind:open={collectionsModalOpen}>
+    <Collections />
 </Modal>
 <div class="relative">
 
@@ -75,32 +102,7 @@
         >
             <div class="overflow-y-auto py-5 px-3 h-full bg-white dark:bg-gray-800">
                 <form action="#" method="GET" class="md:hidden mb-2">
-                    <label for="sidebar-search" class="sr-only">Search</label>
-                    <div class="relative">
-                        <div
-                                class="flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none"
-                        >
-                            <svg
-                                    class="w-5 h-5 text-gray-500 dark:text-gray-400"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                        fill-rule="evenodd"
-                                        clip-rule="evenodd"
-                                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                ></path>
-                            </svg>
-                        </div>
-                        <input
-                                type="text"
-                                name="search"
-                                id="sidebar-search"
-                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
-                                placeholder="Search"
-                        />
-                    </div>
+                    <QuickSearch on:complete={updateResults} on:reset={onReset} />
                 </form>
                 <ul class="space-y-2">
                     <li>
@@ -122,7 +124,8 @@
                         </a>
                     </li>
                     <li>
-                        <button
+                        <button on:click={() => homePageModalOpen = !homePageModalOpen}
+                                id="websiteButton"
                                 type="button"
                                 class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                 aria-controls="dropdown-pages"
@@ -142,48 +145,42 @@
                                 ></path>
                             </svg>
                             <span class="flex-1 ml-3 text-left whitespace-nowrap"
-                            >Pages</span
+                            >Home page</span
                             >
+
+                        </button>
+
+                    </li>
+                    <li>
+                        <button on:click={() => collectionsModalOpen = !collectionsModalOpen}
+                                id="websiteButton"
+                                type="button"
+                                class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                                aria-controls="dropdown-pages"
+                                data-collapse-toggle="dropdown-pages"
+                        >
                             <svg
                                     aria-hidden="true"
-                                    class="w-6 h-6"
+                                    class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                                     fill="currentColor"
                                     viewBox="0 0 20 20"
                                     xmlns="http://www.w3.org/2000/svg"
                             >
                                 <path
                                         fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4zm2 6a1 1 0 011-1h6a1 1 0 110 2H7a1 1 0 01-1-1zm1 3a1 1 0 100 2h6a1 1 0 100-2H7z"
                                         clip-rule="evenodd"
                                 ></path>
                             </svg>
+                            <span class="flex-1 ml-3 text-left whitespace-nowrap"
+                            >Collections</span
+                            >
+
                         </button>
-                        <ul id="dropdown-pages" class="hidden py-2 space-y-2">
-                            <li>
-                                <a
-                                        href="#"
-                                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                >Settings</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                        href="#"
-                                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                >Kanban</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                        href="#"
-                                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                >Calendar</a
-                                >
-                            </li>
-                        </ul>
+
                     </li>
                     <li>
-                        <button
+                        <button on:click={() => menusModalOpen = !menusModalOpen}
                                 type="button"
                                 class="flex items-center p-2 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
                                 aria-controls="dropdown-sales"
@@ -203,45 +200,11 @@
                                 ></path>
                             </svg>
                             <span class="flex-1 ml-3 text-left whitespace-nowrap"
-                            >Sales</span
+                            >Menus</span
                             >
-                            <svg
-                                    aria-hidden="true"
-                                    class="w-6 h-6"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path
-                                        fill-rule="evenodd"
-                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"
-                                ></path>
-                            </svg>
+
                         </button>
-                        <ul id="dropdown-sales" class="hidden py-2 space-y-2">
-                            <li>
-                                <a
-                                        href="#"
-                                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                >Products</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                        href="#"
-                                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                >Billing</a
-                                >
-                            </li>
-                            <li>
-                                <a
-                                        href="#"
-                                        class="flex items-center p-2 pl-11 w-full text-base font-medium text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                                >Invoice</a
-                                >
-                            </li>
-                        </ul>
+
                     </li>
                     <li>
                         <a

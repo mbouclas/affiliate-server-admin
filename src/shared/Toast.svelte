@@ -15,10 +15,24 @@
   export let color = 'green';
   export let simple = true;
   let colors = {
-    success: "#3f83f8",
+    success: "green",
+    error: "red",
+    info: "blue",
   };
 
   let positionClass;
+
+  switch (type) {
+    case 'success':
+      color = colors.success;
+      break;
+    case 'error':
+      color = colors.error;
+      break;
+    case 'info':
+        color = colors.info;
+        break;
+  }
 
   switch (position) {
     case 'top':
@@ -42,6 +56,7 @@
   }
 
 </script>
+
 <div  class={`fixed  ${positionClass} w-full h-auto z-[9999999]`} role="alert"
       >
   <div class=" relative h-64">
@@ -57,10 +72,10 @@
 
     <svelte:fragment slot="icon">
       {#if type === "success"}
-        <Check class="w-5 h-5" />
+        <Check color="green" class="w-5 h-5" />
 
       {:else if type === "error"}
-        <XMark />
+        <XMark color="red" />
       {:else}
         <InformationCircle />
       {/if}
