@@ -15,6 +15,6 @@
     <Input id="title" bind:value={model.title} class="w-full" />
 </div>
 <div class="mb-4">
-    <label for="title" class="block mb-2">Title:</label>
-    <Textarea id="title" bind:value={model.description} class="w-full"></Textarea>
+    <label for="description" class="block mb-2">Description:</label>
+    <Textarea id="description" bind:value={model.description} class="w-full"></Textarea>
 </div>

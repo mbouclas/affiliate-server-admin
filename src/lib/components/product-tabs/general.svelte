@@ -6,7 +6,6 @@
     import MarkdownEditor from "../../../shared/MarkdownEditor.svelte";
     import {TagService} from "../../services/tag.service";
     import {tagsStore} from "../../../tags.store";
-    import {ProductService} from "../../services/product.service";
     import ProductCategorySelector from './product-category-tree.svelte';
     import type {IBaseImageModel, IEvent, IUploadImageResult} from "../../../shared/models/general";
     import Image from "../../../shared/image.svelte";
@@ -14,6 +13,7 @@
     import AffiliateUrlEditor from '../../affiliate-url-editor.svelte';
     import SeoFields from '../seo-fields.svelte';
     import TechnicalDetailsEditor from '../technical-details-editor.svelte';
+    import {ProductService} from "../../services/product.service";
 
     const dispatch = createEventDispatcher();
     export let product: IProduct;
@@ -164,7 +164,7 @@
                     model={product.thumb || {}}
                     title="Product thumbnail"
                     maxNumberOfFiles={1}
-                    module="ProductCategory"
+                    module="Product"
                     itemId={product.id}
                     type="main"
                     on:imageDetailsChanged={onImageDetailsChanged}

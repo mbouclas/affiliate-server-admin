@@ -60,7 +60,6 @@
 
   function handleOnTreeViewChangeEvent(e) {
     const { type, node } = e.detail;
-    console.log(type, node.uuid);
   }
 </script>
 

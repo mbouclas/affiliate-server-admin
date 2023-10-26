@@ -9,6 +9,7 @@
     import type {IProduct} from "../../shared/models/product";
     import {Icon} from "flowbite-svelte-icons";
     import EditProductModal from "./edit-link.svelte";
+    import RefreshDataButton from "../components/previews/preview.svelte";
     let repeatableJobs = [],
         activeSite: ISite = null,
         showQuickSearchModal = false,
@@ -134,6 +135,7 @@
                 {activeSite.name}
             </button>
                 {/if}
+            <RefreshDataButton mode="refresh" />
             <button type="button" on:click={() => showQuickSearchModal = !showQuickSearchModal }
                     id="search" class="inline-flex items-center text-sm font-medium text-center text-gray-500 hover:text-gray-900 focus:outline-none dark:hover:text-white dark:text-gray-400">
                 <Icon name="search-solid"></Icon>

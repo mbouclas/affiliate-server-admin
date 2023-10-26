@@ -11,6 +11,8 @@
     import ImageDetails from "../../../shared/image-details.svelte";
     import {ProductService} from "../../services/product.service";
     import {ProductStoreAction, setProductStoreAction} from "../../../product-store";
+    import MediaLibrary from "../media/library.svelte";
+    import {Modal} from "flowbite-svelte";
 
     export let model: IBaseImageModel[] = [];
     export let itemId: string;
@@ -19,6 +21,7 @@
     const uploadIdPrefix = 'upload-';
     let imgModel;
     let showEditModal = false;
+    let showLibraryModal = false;
     let uploader = {};
     let temp = model;
     const dispatch = createEventDispatcher();
@@ -51,7 +54,6 @@
     }
 
     function handleModalModelChange(e) {
-        console.log('here')
         const foundIndex = model.findIndex((item) => item.id === e.detail.id);
         model[foundIndex] = e.detail;
     }
@@ -169,8 +171,22 @@
         imgModel = model[index];
     };
 
+    async function onSelectFromLibrary(item) {
+        showLibraryModal = false;
+        model = [...model, item];
+        await new ProductService().update(itemId, {images: model});
+        showModalForEdit(model.length - 1);
 
+        setNotificationAction({
+            message: 'Image uploaded successfully',
+            type: 'success',
+        });
+
+    }
 </script>
+<Modal id="add-product-modal" title="Add Product" open={showLibraryModal} size="xl" autoclose={false}>
+    <MediaLibrary onSelect={onSelectFromLibrary}></MediaLibrary>
+</Modal>
 <div class="fixed bottom-0 left-0 z-50 w-full flex items-center justify-center">
     <FileUploader id="product-upload-button" on:uploadComplete={uploadComplete}
                   on:allUploadsComplete={onAllUploadsComplete} on:uploadFailed={onUploadFailed}
@@ -191,7 +207,7 @@
                     </svg>
                     <span class="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">Upload</span>
                 </button>
-                <button type="button"
+                <button type="button" on:click={() => showLibraryModal = !showLibraryModal}
                         class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group">
                     <svg class="w-6 h-6 mb-1 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
                          xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">

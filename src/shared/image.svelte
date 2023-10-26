@@ -6,6 +6,8 @@
   import type {IEvent, IGenericObject} from "./models/general";
   import {setNotificationAction} from "../notifications-store";
   import {ImageService} from "../lib/services/image.service";
+  import {Modal} from "flowbite-svelte";
+  import MediaLibrary from "../lib/components/media/library.svelte";
   const uploadIdPrefix = 'upload-';
   export let model: IGenericObject | IGenericObject[] = {};
   export let itemId;
@@ -16,6 +18,7 @@
   export let type: 'main' | 'image' = 'main';
   export let maxNumberOfFiles = 1;
   let show_modal = false;
+  let showLibraryModal = false;
 
   const dispatch = createEventDispatcher();
 
@@ -74,8 +77,16 @@
   function edit() {
     show_modal = !show_modal;
   }
-</script>
 
+  function onSelectFromLibrary(item) {
+    showLibraryModal = false;
+    dispatch('allUploadsComplete', item);
+    edit();
+  }
+</script>
+<Modal id="add-product-modal" title="Add Product" open={showLibraryModal} size="xl" autoclose={false}>
+  <MediaLibrary onSelect={onSelectFromLibrary}></MediaLibrary>
+</Modal>
 <ImageDetails  bind:showModal={show_modal} {onSave} {model} on:change={handleModalModelChange} />
 <div class="w-full bg-white  shadow dark:bg-gray-800 dark:border-gray-700">
   <div class="pt-4 items-center text-center">
@@ -123,6 +134,7 @@
               >
             </button>
             <button
+                    on:click={() => showLibraryModal = !showLibraryModal}
               type="button"
               class="inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
             >

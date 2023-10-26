@@ -1,7 +1,24 @@
 import {BaseHttpService} from "./base-http.service";
-import type {IGenericObject} from "../../shared/models/general";
+import type {IBaseImageModel, IGenericObject} from "../../shared/models/general";
+import type {IPagination} from "../../shared/models/general";
+import queryString from "query-string";
 
 export class ImageService extends BaseHttpService {
+
+    async find(filters: IGenericObject = {}, limit = 100): Promise<IPagination<IBaseImageModel>> {
+        let qs;
+
+        filters.limit = limit;
+
+        if (Object.keys(filters).length > 0) {
+            qs = queryString.stringify(filters);
+        }
+
+
+
+        return await this.get(`image${qs ? `?${qs}` : ''}`);
+    }
+
     async deleteImage(imageId: string) {
         const res = await super.delete(`image/${imageId}`);
         return res.data;

@@ -149,7 +149,9 @@
 <!-- Start block -->
 <AddProductsModal open={showAddProductsModal} on:productsAdded={handleProductsAdded} />
 <AddProductModal open={showAddProductModal} on:productAdded={handleProductAdded} />
-<EditProductModal bind:product={currentProduct} on:update={handleEditComplete} closeOnSave={false} />
+{#if currentProduct}
+<EditProductModal bind:product={currentProduct} on:update={handleEditComplete} closeOnSave={false} on:closed={() => currentProduct = null} />
+    {/if}
 <div class="my-4">
     <Heading tag="h3">{res.total || 0} Products</Heading>
 </div>

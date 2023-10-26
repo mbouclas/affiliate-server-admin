@@ -1,16 +1,18 @@
 <script lang="ts">
     import {createEventDispatcher, onMount} from "svelte";
-    import {ProductCategoryService} from "../../services/productCategory.service";
+
     import {  MultiSelect, Badge } from 'flowbite-svelte';
     import Loading from "../../../shared/Loading.svelte";
 
     import {flattenTree} from "../../../helpers/data";
-    import {ProductService} from "../../services/product.service";
+    import {PageCategoryService} from "../../services/pageCategory.service";
+    import {PageService} from "../../services/page.service";
+
     const dispatch = createEventDispatcher();
 
     let items = [],
         loading = false,
-    selected = [];
+        selected = [];
     export let model = [];
     export let label = 'Categories';
     export let saveOnSelect = false;
@@ -20,7 +22,7 @@
 
     onMount(async () => {
         loading = true;
-        const res = await new ProductCategoryService().find();
+        const res = await new PageCategoryService().find();
         items = flattenTree(res).map(i => ({...i, ...{
                 name: `${Array(i.level).fill('-').join('')} ${i.title}`, value: i.id
             }}));
@@ -56,7 +58,7 @@
             return;
         }
 
-        await new ProductService().update(productId, {categories: model});
+        await new PageService().update(productId, {categories: model});
     }
 
 
@@ -74,7 +76,7 @@
         </div>
 
         <MultiSelect items={items} bind:value={selected} size='lg' let:clear let:item
-        on:selected={onCategorySelection}>
+                     on:selected={onCategorySelection}>
             <Badge color="green" dismissable params={{ duration: 100 }} on:dismiss={clear}>
                 {item.title}
             </Badge>
